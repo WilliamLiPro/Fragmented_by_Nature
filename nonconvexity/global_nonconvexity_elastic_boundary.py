@@ -1,0 +1,194 @@
+import sys
+
+import pandas as pd
+
+print('Python %s on %s' % (sys.version, sys.platform))
+sys.path.extend(['/home/liweipeng/disk_sda2/Data/FlowTimeOptimization/'])
+import os
+os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
+import time
+import torch
+from tqdm import tqdm
+from utils import (tensor_polygon_intersect, LoadAvailableRegionAndCreateCommutingPoints)
+
+
+def global_nonconvexity(
+        region_data_file='/home/liweipeng/disk_sda2/Dataset/road map/detour测试/地理障碍3个城市.shp',
+        id_name='ID_HDC_G0',
+        sampling_n_expected=4000,
+        save_path='../result/global_nonconvexity/全球城市_nonconvexity',
+        st_id=0,
+):
+    t = time.time()
+
+    # save path
+    save_all = False
+    if save_path is not None:
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+
+    # load geo data
+    geo_data = LoadAvailableRegionAndCreateCommutingPoints(
+        region_data_file, id_name, sampling_n_expected=sampling_n_expected,)
+
+    t_f = time.time()
+    for i, data in enumerate(geo_data[st_id:]):
+        t_load = time.time()
+        ii = i + st_id
+        id_hdc_g0 = int(geo_data.idx[ii])
+        print(f'No. {ii} region')
+        list_polygons, commuting_points, region_bounds, x_factor, y_factor, region_center, share_of_barrier = data
+
+        # graphical index
+        commuting_points = commuting_points.to(dtype=torch.float32)
+        torch.cuda.empty_cache()
+        relative_length = tensor_polygon_intersect(commuting_points, list_polygons, 16, device=torch.device('cuda:3'))
+        nonconvexity = relative_length.mean(dim=1).mean()
+        relative_length_max = relative_length.max(dim=1)[0].max()
+        relative_length_std = relative_length.std()
+        n_c = relative_length.size()[0]
+        t_run = time.time()
+
+        print(f'No. {ii} region, {id_name}: {id_hdc_g0}, share_of_barrier = {share_of_barrier}, nonconvexity = {nonconvexity}, \n'
+              f'data load and transform {t_load - t_f} s, calculation {t_run - t_load} s, \n'
+              f'total time = {t_run - t}.')
+        t_f = t_run
+
+        # save txt
+        if save_path is not None:
+            save_name = save_path + f'/{id_hdc_g0}_index.txt'
+            if not os.path.exists(save_path):
+                os.makedirs(save_path)
+            file = open(save_name, 'w')
+            file.write(f'{id_hdc_g0},{share_of_barrier},{nonconvexity},{relative_length_max},{relative_length_std},{n_c}')
+            file.close()
+
+
+def summary_to_dataframe(summary: list[dict], sort_by: str = None):
+    data = pd.DataFrame(summary)
+    if sort_by is not None:
+        data = data.sort_values(by=sort_by)
+    return data
+
+
+def save_csv(data: pd.DataFrame, filename: str):
+    # whether path exist
+    print('Save summary to: ' + filename + ' ...')
+    # save
+    (filepath, temp_filename) = os.path.split(filename)
+    if not os.path.exists(filepath):
+        os.makedirs(filepath)
+    if '.csv' not in filename:
+        filename += '.csv'
+    data.to_csv(filename)
+    print('Save finish')
+
+
+def convert_text_to_dataframe(file_path: str, id_name: str):
+    # scan the txt files
+    print(f'Scanning {file_path} ...')
+    files = os.listdir(file_path)
+    for i, file_name in enumerate(files):
+        front, ext = os.path.splitext(file_name)
+        if not ext == '.txt':
+            del files[i]
+    print(f'Got. {len(files)} .txt files')
+
+    # get summary
+    summaries = []
+    for file_name in files:
+        position = file_path + '/' + file_name
+        print(f'Open {file_name}')
+        with open(position, 'r') as f:
+            data = f.read().split(',')
+            summary = {id_name: data[0],
+                       'share_of_barrier': data[1],
+                       'nonconvexity': data[2],
+                       'number of commuting nodes': data[5],
+                       }
+            summaries.append(summary)
+    data = summary_to_dataframe(summaries, id_name)
+    return data
+
+
+def convert_text_to_csv(file_path: str, id_name: str, save_name: str = ''):
+    data = convert_text_to_dataframe(file_path, id_name)
+    save_csv(data, f'{file_path}/{save_name}summary.csv', )
+
+
+def convert_two_text_to_csv(file_path_no_boundary: str, file_path_boundary: str,
+                            id_name: str, save_name: str = ''):
+    # the txt file without_boundary
+    data_without_boundary = convert_text_to_dataframe(file_path_no_boundary, id_name)
+    data_without_boundary.rename(columns={'share_of_barrier': 'share_of_barrier (no boundary)',
+                                          'nonconvexity': 'nonconvexity (no boundary)',
+                                          'number of commuting nodes': 'commuting nodes (no boundary)'},
+                                 inplace=True)
+    # the txt file without_boundary
+    data_with_boundary = convert_text_to_dataframe(file_path_boundary, id_name)
+    data_with_boundary.rename(columns={'share_of_barrier': 'share_of_barrier (boundary)',
+                                       'nonconvexity': 'nonconvexity (boundary)',
+                                       'number of commuting nodes': 'commuting nodes (boundary)'},
+                              inplace=True)
+    # combine them together
+    data = pd.merge(data_without_boundary, data_with_boundary, how='outer', on=id_name)
+    save_csv(data, f'{file_path_no_boundary}/{save_name}summary.csv', )
+
+
+if __name__ == '__main__':
+    # AUE
+    id_name = 'areaID'
+    # region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/AUE-200/elastic_boundary/Data_弹性ratio_去除水体和山脉.shp"
+    # save_path_no_boundary = '../result/global_nonconvexity/AUE-200-elastic-no-boundary'
+    # # global_nonconvexity(region_data_file, id_name, 2500, save_path_no_boundary)
+    # region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/AUE-200/elastic_boundary/Data_弹性ratio_去除水体山脉和国界.shp"
+    # save_path_with_boundary = '../result/global_nonconvexity/AUE-200-elastic-with-boundary'
+    # # global_nonconvexity(region_data_file, id_name, 2500, save_path_with_boundary)
+    # convert_two_text_to_csv(save_path_no_boundary, save_path_with_boundary, id_name, '../AUE-200-elastic nonconvexity ')
+    region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/AUE-200/new_tatio/AUE_newratio.shp"
+    save_path = '../result/global_nonconvexity/AUE_newratio'
+    global_nonconvexity(region_data_file, id_name, 2500, save_path)
+    convert_text_to_csv(save_path, id_name, '../AUE_newratio nonconvexity ')
+
+
+    # UCDB
+    # id_name = 'ID_HDC_G0'
+    # region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/UCDB/nonconvexity/available_regions/裁剪后10km.shp"
+    # save_path = '../result/global_nonconvexity/UCDB - r10km'
+    # global_nonconvexity(region_data_file, id_name, 2500, save_path)
+    # convert_text_to_csv(save_path, id_name, '../UCDB - r10km nonconvexity ')
+    # id_name = 'uc_id'
+    # region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/UCDB/nonconvexity/available_regions/裁剪后5km.shp"
+    # save_path = '../result/global_nonconvexity/UCDB - r5km'
+    # global_nonconvexity(region_data_file, id_name, 2500, save_path)
+    # convert_text_to_csv(save_path, id_name, '../UCDB - r5km nonconvexity ')
+
+
+    # region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/UCDB/nonconvexity/elastic/UCDB2019_弹性ratio_去除水体和山脉.shp"
+    # save_path_no_boundary = '../result/global_nonconvexity/UCDB-elastic-no-boundary'
+    # global_nonconvexity(region_data_file, id_name, 2500, save_path_no_boundary)
+    # region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/UCDB/nonconvexity/elastic/UCDB2019_弹性ratio_去除水山脉及国界.shp"
+    # save_path_with_boundary = '../result/global_nonconvexity/UCDB-elastic-with-boundary'
+    # global_nonconvexity(region_data_file, id_name, 2500, save_path_with_boundary)
+    # convert_two_text_to_csv(save_path_no_boundary, save_path_with_boundary, id_name, '../UCDB-elastic nonconvexity ')
+
+    # GHUB
+    # id_name = 'GHUB_ID'
+    # region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GHUB/elastic/GHUB_城市区域去掉水体和陡坡.shp"
+    # save_path_no_boundary = '../result/global_nonconvexity/GHUB-elastic-no-boundary'
+    # global_nonconvexity(region_data_file, id_name, 2500, save_path_no_boundary)
+    # region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GHUB/elastic/GHUB_弹性半径_去掉水体山脉和国界.shp"
+    # save_path_with_boundary = '../result/global_nonconvexity/GHUB-elastic-with-boundary'
+    # global_nonconvexity(region_data_file, id_name, 2500, save_path_with_boundary)
+    # convert_two_text_to_csv(save_path_no_boundary, save_path_with_boundary, id_name, '../GHUB-elastic nonconvexity ')
+
+    # GUB
+    # id_name = 'GUB_ID'
+    # region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GUB/elastic/GUB弹性半径_去掉水体与山脉.shp"
+    # save_path_no_boundary = '../result/global_nonconvexity/GUB-elastic-no-boundary'
+    # global_nonconvexity(region_data_file, id_name, 2500, save_path_no_boundary)
+    # region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GUB/elastic/GUB_弹性半径_去掉水体山脉和国界.shp"
+    # save_path_with_boundary = '../result/global_nonconvexity/GUB-elastic-with-boundary'
+    # global_nonconvexity(region_data_file, id_name, 2500, save_path_with_boundary)
+    # convert_two_text_to_csv(save_path_no_boundary, save_path_with_boundary, id_name, '../GUB-elastic nonconvexity ')
+
