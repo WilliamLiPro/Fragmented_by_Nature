@@ -2,6 +2,7 @@ import sys
 print('Python %s on %s' % (sys.version, sys.platform))
 sys.path.extend(['../..'])
 import os
+import pandas as pd
 import time
 import torch
 from tqdm import tqdm
@@ -135,7 +136,7 @@ def convert_text_to_csv(save_path: str, id_name: str, save_name: str = ''):
                        'number of road nodes': data[7],
                        }
             summaries.append(summary)
-    save_csv(summaries, f'{save_path}/{save_name}summary.csv', )
+    save_csv(summaries, f'{save_path}/{save_name}summary.csv', id_name,)
 
 
 if __name__ == '__main__':

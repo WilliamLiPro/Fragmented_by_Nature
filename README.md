@@ -30,6 +30,8 @@ Here is the output of demo_nonconvexity.py:
 ## Detour
 Definition: 
 
+Notice: since the detour is defined on existing road map, here the commuting nodes are distributed near the roads. So, they are fewer than in nonconvexity.
+
 * You can run the "[detour/demo_detour.py](detour/demo_detour.py)" directly.
 
 Here is the output of demo_detour.py:
