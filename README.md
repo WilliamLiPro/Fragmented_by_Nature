@@ -37,7 +37,7 @@ Here is the [output](result/detour/demo-r10km detour summary.csv):
 <summary>demo-r10km detour summary.csv</summary>
 
 | areaID | share_of_barrier | detour | distance_max | distance_mean | distance_std | number of commuting nodes | number of road nodes |
-|-----:|---------|-----------|-----------|-----------|-----------|-----------|-----------|
+|-----:|--------|--------|--------|---------|---------|-------|-------|
 |     1| 0.2185 | 0.2665 | 27.5856 | 10.5261 | 5.0514 | 948 | 31498 |
 |     2| 0.009491 | 0.3590 | 23.8956 | 7.8960 | 3.9693 | 313 | 6301 |
 |     3| 0.0006421 | 0.1925 | 26.5877 | 10.7287 | 5.0226 | 1224 | 68350 |
