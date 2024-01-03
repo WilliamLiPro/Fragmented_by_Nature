@@ -15,7 +15,7 @@ Definition:
 
 * You can run the "[nonconvexity/demo_nonconvexity.py](nonconvexity/demo_nonconvexity.py)" directly. 
 
-Here is the [output](result/global_nonconvexity/demo_data-r10km nonconvexity summary.csv):
+Here is the output of demo_nonconvexity.py:
 
 <summary>demo_data-r10km nonconvexity summary.csv</summary>
 
@@ -32,7 +32,7 @@ Definition:
 
 * You can run the "[detour/demo_detour.py](detour/demo_detour.py)" directly.
 
-Here is the [output](result/detour/demo-r10km detour summary.csv):
+Here is the output of demo_detour.py:
 
 <summary>demo-r10km detour summary.csv</summary>
 
