@@ -8,7 +8,7 @@ Author: Luyao Wang, Albert Saiz, Weipeng Li
 * Please run "pip install -r requirements.txt" to install the dependencies before executing any python file.
 
 ## Share of barrier
-Share of barrier: The share of geographic barriers in certain region. It is calculated in preprocess of "Nonconvexity" and "Detour".
+Share of barrier: The share of geographic barriers in certain region. It is calculated in preprocessing of both "Nonconvexity" and "Detour".
 
 ## Nonconvexity
 Definition: 

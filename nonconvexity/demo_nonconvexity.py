@@ -143,10 +143,10 @@ if __name__ == '__main__':
     barrier_data_file = "../Data/demo_data/barrier 1-3.shp"
     id_name = 'areaID'
 
-    save_path = '../result/global_nonconvexity/demo_data-r10km/'
+    save_path = '../result/global_nonconvexity/demo_data-r10km'
     global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.5, 10, save_path)
     convert_text_to_csv(save_path, id_name, '../demo_data-r10km nonconvexity ')
 
-    save_path = '../result/global_nonconvexity/demo_data-r5km/'
+    save_path = '../result/global_nonconvexity/demo_data-r5km'
     global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.25, 5, save_path)
     convert_text_to_csv(save_path, id_name, '../demo_data-r5km nonconvexity ')
