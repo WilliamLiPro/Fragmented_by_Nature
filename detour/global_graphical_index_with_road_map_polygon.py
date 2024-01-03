@@ -1,6 +1,6 @@
 import sys
 print('Python %s on %s' % (sys.version, sys.platform))
-sys.path.extend(['/home/liweipeng/disk_sda2/Data/FlowTimeOptimization/'])
+sys.path.extend(['../..'])
 import os
 import time
 import torch

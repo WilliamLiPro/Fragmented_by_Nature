@@ -1,5 +1,6 @@
 import sys
 print('Python %s on %s' % (sys.version, sys.platform))
+sys.path.extend(['../..'])
 import pandas as pd
 import os
 os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
