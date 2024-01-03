@@ -1,6 +1,5 @@
 import sys
 print('Python %s on %s' % (sys.version, sys.platform))
-sys.path.extend(['/home/liweipeng/disk_sda2/Data/FlowTimeOptimization/'])
 import os
 import time
 import torch
@@ -9,12 +8,12 @@ from utils import (tensor_polygon_intersect, LoadPolygonAndCreateCommutingPoints
 
 
 def global_nonconvexity(
-        region_data_file='/home/liweipeng/disk_sda2/Dataset/road map/detour测试/地理障碍3个城市.shp',
-        barrier_data_file='/home/liweipeng/disk_sda2/Dataset/road map/detour测试/三个城市地理障碍.shp',
+        region_data_file='../Data/demo_data/center 1-3.shp',
+        barrier_data_file='../Data/demo_data/barrier 1-3.shp',
         id_name='ID_HDC_G0',
         sampling_interval=0.25,
         radius=10,
-        save_path='../result/global_nonconvexity/全球城市_nonconvexity',
+        save_path='../result/global_nonconvexity/global_nonconvexity',
         st_id = 0,
 ):
     t = time.time()
@@ -39,7 +38,7 @@ def global_nonconvexity(
         list_polygons, commuting_points, region_bounds, x_factor, y_factor, region_center, share_of_barrier = data
 
         # graphical index
-        commuting_points = commuting_points.to(dtype=torch.float16)
+        commuting_points = commuting_points.to(dtype=torch.float32)
         torch.cuda.empty_cache()
         relative_length = tensor_polygon_intersect(commuting_points, list_polygons, 16)
         nonconvexity = relative_length.mean(dim=1).mean()
@@ -111,88 +110,86 @@ def convert_text_to_csv(save_path: str, id_name: str, save_name: str = ''):
 
 
 if __name__ == '__main__':
-    # region_data_file = '/home/liweipeng/disk_sda2/Dataset/road map/detour测试/地理障碍3个城市.shp'
-    # barrier_data_file = '/home/liweipeng/disk_sda2/Dataset/road map/detour测试/三个城市地理障碍.shp'
-    # id_name = 'ID_HDC_G0'
-    # region_data_file = '/home/liweipeng/disk_sda2/Dataset/road map/AUE-test3/中心点1-3.shp'
-    # barrier_data_file = '/home/liweipeng/disk_sda2/Dataset/road map/AUE-test3/地理障碍1-3.shp'
-    # id_name = 'areaID'
-    # global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.5, 10, None)
-    # region_data_file = '/home/liweipeng/disk_sda2/Dataset/road map/AUE-200/Data坐标点.shp'
-    # barrier_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/AUE-200/地理障碍合并.shp"
-    # id_name = 'areaID'
-    # save_path = '../result/global_nonconvexity/AUE-200-r10km'
-    # global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.5, 10, save_path, 1)
-    # convert_text_to_csv(save_path, id_name, '../AUE-200-r10km nonconvexity ')
-    # save_path = '../result/global_nonconvexity/AUE-200-r5km'
-    # global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.25, 5, save_path, 1)
-    # convert_text_to_csv(save_path, id_name, '../AUE-200-r5km nonconvexity ')
+    """
+        Please download the original data and crop them according to the method 
+        in supplementary material.
+        Then, copy the filename of region center to the "region_data_file", and  
+        copy the filename of geo-barrier to the "barrier_data_file".
+        
+        e.g. 
+        region_data_file = '../Data/AUE-200/region-center.shp'
+        barrier_data_file = '../Data/AUE-200/geo-barrier.shp'
+    """
+    
+    # AUE-200
+    id_name = 'areaID'
+    region_data_file = '../Data/AUE-200/region-center.shp'
+    barrier_data_file = "../Data/AUE-200/geo-barrier.shp"
+    save_path = '../result/global_nonconvexity/AUE-200-r10km'
+    global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.5, 10, save_path, 1)
+    convert_text_to_csv(save_path, id_name, '../AUE-200-r10km nonconvexity ')
+    save_path = '../result/global_nonconvexity/AUE-200-r5km'
+    global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.25, 5, save_path, 1)
+    convert_text_to_csv(save_path, id_name, '../AUE-200-r5km nonconvexity ')
 
-    # region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GUB/GUB_转点(大于5km).shp"
-    # barrier_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GUB/GUB_障碍_水体和坡度.shp"
-    # id_name = 'GUB_ID'
-    # save_path = '../result/global_nonconvexity/GUB-r10km'
-    # global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.5, 10, save_path)
-    # convert_text_to_csv(save_path, id_name, '../GUB-r10km nonconvexity ')
-    # save_path = '../result/global_nonconvexity/GUB-r5km'
-    # global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.25, 5, save_path)
-    # convert_text_to_csv(save_path, id_name, '../GUB-r5km nonconvexity ')
-
-    # region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GHUB/GHUB_中心点.shp"
-    # barrier_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GHUB/GHUB_水体和坡度.shp"
-    # id_name = 'GHUB_ID'
-    # save_path = '../result/global_nonconvexity/GHUB-r10km'
-    # global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.5, 10, save_path)
-    # convert_text_to_csv(save_path, id_name, '../GHUB-r10km nonconvexity ')
-    # save_path = '../result/global_nonconvexity/GHUB-r5km'
-    # global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.25, 5, save_path)
-    # convert_text_to_csv(save_path, id_name, '../GHUB-r5km nonconvexity ')
-
-    # region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/UCDB/nonconvexity/UCDB2019_10km存在国界问题的点.shp"
-    # barrier_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/UCDB/nonconvexity/UCDB_只包含水体和山脉但是与国界相交的地理障碍_10km.shp"
-    # id_name = 'ID_HDC_G0'
-    # save_path = '../result/global_nonconvexity/UCDB-r10km'
-    # global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.5, 10, save_path)
-    # convert_text_to_csv(save_path, id_name, '../UCDB-r10km nonconvexity ')
-
-    # region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/UCDB/nonconvexity/UCDB2019_5km存在国界问题的点.shp"
-    # barrier_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/UCDB/nonconvexity/UCDB_只包含水体和山脉但是与国界相交的地理障碍_5km.shp"
-    # save_path = '../result/global_nonconvexity/UCDB-r5km'
-    # global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.25, 5, save_path)
-    # convert_text_to_csv(save_path, id_name, '../UCDB-r5km nonconvexity ')
-
-    # region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/AUE-200/inculude country bound/Data地理障碍10km包含国界的城市（3个）_中心点.shp"
-    # barrier_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/AUE-200/inculude country bound/Data地理障碍10km包含国界的城市（3个）.shp"
-    # id_name = 'areaID'
-    # save_path = '../result/global_nonconvexity/AUE-boundary-r10km'
-    # global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.5, 10, save_path)
-    # convert_text_to_csv(save_path, id_name, '../AUE-boundary-r10km nonconvexity ')
-
-    id_name = 'GHUB_ID'
-    region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GHUB/country boundary/GHUB_10km地理障碍（包含国界）_中心点.shp"
-    barrier_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GHUB/country boundary/GHUB_10km地理障碍（包含国界）.shp"
-    save_path = '../result/global_nonconvexity/GHUB-boundary-r10km'
+    region_data_file = "../Data/AUE-200/inculude country bound/Data region-center.shp"
+    barrier_data_file = "../Data/AUE-200/inculude country bound/Data geo-barrier.shp"
+    save_path = '../result/global_nonconvexity/AUE-boundary-r10km'
     global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.5, 10, save_path)
-    convert_text_to_csv(save_path, id_name, '../GHUB-boundary-r10km nonconvexity ')
+    convert_text_to_csv(save_path, id_name, '../AUE-boundary-r10km nonconvexity ')
 
-    region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GHUB/country boundary/GHUB_5km地理障碍（包含国界）_中心点.shp"
-    barrier_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GHUB/country boundary/GHUB_5km地理障碍（包含国界）.shp"
-    save_path = '../result/global_nonconvexity/GHUB-boundary-r5km'
+    # GUB
+    id_name = 'GUB_ID'
+    region_data_file = "../Data/GUB/GUB_center.shp"
+    barrier_data_file = "../Data/GUB/GUB_barrier.shp"
+    save_path = '../result/global_nonconvexity/GUB-r10km'
+    global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.5, 10, save_path)
+    convert_text_to_csv(save_path, id_name, '../GUB-r10km nonconvexity ')
+    save_path = '../result/global_nonconvexity/GUB-r5km'
     global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.25, 5, save_path)
-    convert_text_to_csv(save_path, id_name, '../GHUB-boundary-r5km nonconvexity ')
+    convert_text_to_csv(save_path, id_name, '../GUB-r5km nonconvexity ')
 
     id_name = 'GUB_ID'
-    region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GUB/country boundary/GUB_10km_地理障碍(包含国界)_中心点.shp"
-    barrier_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GUB/country boundary/GUB_10km_地理障碍(包含国界).shp"
+    region_data_file = "../Data/GUB/country boundary/GUB_10km_center.shp"
+    barrier_data_file = "../Data/GUB/country boundary/GUB_10km_barrier.shp"
     save_path = '../result/global_nonconvexity/GUB-boundary-r10km'
     global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.5, 10, save_path)
     convert_text_to_csv(save_path, id_name, '../GUB-boundary-r10km nonconvexity ')
 
-    region_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GUB/country boundary/GUB_5km_地理障碍(包含国界)_中心点.shp"
-    barrier_data_file = "/home/liweipeng/disk_sda2/Dataset/road map/GUB/country boundary/GUB_5km_地理障碍(包含国界).shp"
+    region_data_file = "../Data/GUB/country boundary/GUB_5km_center.shp"
+    barrier_data_file = "../Data/GUB/country boundary/GUB_5km_barrier.shp"
     save_path = '../result/global_nonconvexity/GUB-boundary-r5km'
     global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.25, 5, save_path)
     convert_text_to_csv(save_path, id_name, '../GUB-boundary-r5km nonconvexity ')
+
+    # UCDB
+    id_name = 'ID_HDC_G0'
+    region_data_file = "../Data/UCDB/nonconvexity/UCDB2019_boundary_10km-center.shp"
+    barrier_data_file = "../Data/UCDB/nonconvexity/UCDB_boundary_10km.shp"
+    save_path = '../result/global_nonconvexity/UCDB-boundary-r10km'
+    global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.5, 10, save_path)
+    convert_text_to_csv(save_path, id_name, '../UCDB-boundary-r10km nonconvexity ')
+
+    region_data_file = "../Data/UCDB/nonconvexity/UCDB2019_boundary_5km-center.shp"
+    barrier_data_file = "../Data/UCDB/nonconvexity/UCDB_boundary_5km.shp"
+    save_path = '../result/global_nonconvexity/UCDB-boundary-r5km'
+    global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.25, 5, save_path)
+    convert_text_to_csv(save_path, id_name, '../UCDB-boundary-r5km nonconvexity ')
+
+    # GHUB
+    id_name = 'GHUB_ID'
+    region_data_file = "../Data/GHUB/country boundary/GHUB_10km-center.shp"
+    barrier_data_file = "../Data/GHUB/country boundary/GHUB_10km-barrier.shp"
+    save_path = '../result/global_nonconvexity/GHUB-boundary-r10km'
+    global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.5, 10, save_path)
+    convert_text_to_csv(save_path, id_name, '../GHUB-boundary-r10km nonconvexity ')
+
+    region_data_file = "../Data/GHUB/country boundary/GHUB_5km-center.shp"
+    barrier_data_file = "../Data/GHUB/country boundary/GHUB_5km-barrier.shp"
+    save_path = '../result/global_nonconvexity/GHUB-boundary-r5km'
+    global_nonconvexity(region_data_file, barrier_data_file, id_name, 0.25, 5, save_path)
+    convert_text_to_csv(save_path, id_name, '../GHUB-boundary-r5km nonconvexity ')
+
 
 
 

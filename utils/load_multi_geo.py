@@ -912,9 +912,9 @@ def show_any_geo():
 def show_roads():
     import matplotlib.pyplot as plt
     geo_data = LoadPolygonAndCreateCommutingPointsRoadMap(
-        '/home/liweipeng/disk_sda2/Dataset/road map/AUE-200/Data坐标点.shp',
-        "/home/liweipeng/disk_sda2/Dataset/road map/AUE-200/地理障碍合并.shp",
-        '/home/liweipeng/disk_sda2/Dataset/road map/AUE-200/AUE路网匹配.shp',
+        '../Data/demo_data/center 1-3.shp',
+        '../Data/demo_data/barrier 1-3.shp',
+        '../Data/demo_data/road_map.shp',
         'areaID',
         0.5, 10, use_osm_roads=True,
     )
