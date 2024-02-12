@@ -14,7 +14,7 @@ Share of barrier: The share of geographic barriers in certain region. It is calc
 ## Nonconvexity
 The nonconvexity index is designed to assess the impact of geographic barriers on the direct-line connectivity between various locations within an urban area. To calculate this index, we initially generate a set of random points, evenly distributed across the urban footprint, excluding those points that fall within barrier areas. These points are spaced at intervals greater than 200 meters, with each city having approximately 1,000 to 3,000 points to ensure comprehensive coverage of the study area. Subsequently, we create straight lines connecting each pair of points. These lines are then overlaid with the geographic barriers within the designated i km buffer zone. This process allows us to calculate the length of each line that intersects with barriers. We then determine the proportion of intersected length for each line. The average proportion of line lengths intersected by barriers is calculated to establish the nonconvexity index for each urban area.
 
-$$NC=\frac{1}{n^{2} } \sum \sum \frac{SLDI_{pipj} }{SLD_{pipj} }$$,
+$$NC=\frac{1}{n^{2} } \sum \sum \frac{SLDI_{pipj} }{SLD_{pipj} },$$
 
 where $SLD_{pipj}$ denotes the length of straight line distance between point $p_i$ and $p_j$, $SLDI_{pipj}$ denotes the length of lines intersected by geographic barriers between point $p_i$ and $p_j$, n denotes the number of points located within the urban center at an interval of 5 or 10 km, and NC denotes the nonconvexity index of the urban center.
 
@@ -37,9 +37,9 @@ Here is the output of demo_nonconvexity.py:
 The detour index is designed to estimate the minimum additional driving distances incurred due to geographic barriers and the layout of the street/road network. To calculate this index, we start by randomly generating points within the urban area at 500-meter intervals, excluding areas classified as barriers. For each pair of points, we calculate both the Euclidean distance (the straight-line distance) and the minimum road distance. The minimum road distance is defined as the length of the shortest possible route via roads (such as streets, bridges, and tunnels) connecting the origin and destination points. The difference between the straight-line distance and the minimum road distance represents the detour for each pair of points. The detour index for a city is then determined by calculating the average detour across all pairs of points:
 
 
-$$detour_{ij}=\frac{d_{ij}}{D_{ij}}-1$$,
+$$detour_{ij}=\frac{d_{ij}}{D_{ij}}-1,$$
 
-$$Detour=\frac{\sum detour_{ij}}{n^{2}}$$,
+$$Detour=\frac{\sum detour_{ij}}{n^{2}},$$
 
 where $d_{ij}$ is the minimum road distance, $D_{ij}$ is the Euclidean distance between them, and $detour_{ij}$ is the detour index between $p_i$ and $p_j$. n represents the number of points within 10 km (or 5 km) of the city center and Detour represent the average detour index of each city.
 
