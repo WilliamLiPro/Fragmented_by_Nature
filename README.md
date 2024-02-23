@@ -13,7 +13,7 @@ Share of barrier: The Share of barriers index quantifies the proportion of three
 
 $$S_i=\frac{\sum P_i+\sum W_i+\sum \hat{B}_i}{\pi i^2}$$
 
-where $W_i$ and $P_i$ denote the areas of water coverage and steep slope areas located within the i km circle around the city center, respectively. $B ̂_i$ represents the area outside the national boundary excluding its overlaps with mountains and water. Finally, $S_i$ denotes the share of barriers index of the urban unit.
+where $W_i$ and $P_i$ denote the areas of water coverage and steep slope areas located within the i km circle around the city center, respectively. $\hat{B}_i$ represents the area outside the national boundary excluding its overlaps with mountains and water. Finally, $S_i$ denotes the share of barriers index of the urban unit.
 
 * Share of barrier is calculated in preprocessing of "Nonconvexity" and "Detour".
 
