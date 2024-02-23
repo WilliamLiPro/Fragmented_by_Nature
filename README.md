@@ -9,7 +9,11 @@ Author: Luyao Wang, Albert Saiz, Weipeng Li
 * Please run "pip install -r requirements.txt" to install the dependencies before executing any python file.
 
 ## Share of barrier
-Share of barrier: The share of geographic barriers in certain region. It is calculated in preprocessing of both "Nonconvexity" and "Detour".
+Share of barrier: The Share of barriers index quantifies the proportion of three types of geographic barriers relative to the total urban area within a i km (10 km or 5 km) distance from the city center. This calculation is independent of the city's shape. In our methodology, the share of barriers within an i km distance from each urban center is determined by the following calculation:
+
+$$S_i=\frac{\sum P_i+\sum W_i+\sum \hat{B}_i}{\pi i^2}$$
+
+where $W_i$ and $P_i$ denote the areas of water coverage and steep slope areas located within the i km circle around the city center, respectively. $B ̂_i$ represents the area outside the national boundary excluding its overlaps with mountains and water. Finally, $S_i$ denotes the share of barriers index of the urban unit.
 
 ## Nonconvexity
 The nonconvexity index is designed to assess the impact of geographic barriers on the direct-line connectivity between various locations within an urban area. To calculate this index, we initially generate a set of random points, evenly distributed across the urban footprint, excluding those points that fall within barrier areas. These points are spaced at intervals greater than 200 meters, with each city having approximately 1,000 to 3,000 points to ensure comprehensive coverage of the study area. Subsequently, we create straight lines connecting each pair of points. These lines are then overlaid with the geographic barriers within the designated i km buffer zone. This process allows us to calculate the length of each line that intersects with barriers. We then determine the proportion of intersected length for each line. The average proportion of line lengths intersected by barriers is calculated to establish the nonconvexity index for each urban area.
