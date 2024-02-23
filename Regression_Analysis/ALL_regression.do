@@ -156,7 +156,7 @@ drop _est_T3_*
 /* S.6-2. (Complete Table 3) regressions shown in above 'Table 3'*/
 /* S.7. (Table 1 with 5 km radius) Detour regressions at 5 kilometres from center*/
 /* S.8. (TABLE 2 WITH 5 KM RADIUSES) regressions of nonconvexity from the four datasets with 5 km radiuses*/
-do "DATAGEN/Table S5-S8.do"
+do "Table S5-S8.do"
 
 
 
