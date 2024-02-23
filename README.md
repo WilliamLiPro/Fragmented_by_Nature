@@ -69,7 +69,7 @@ Here is the output of demo_detour.py:
 * All the variables adopted in the regressions, as well as Stata code are included in folder 'Regression_Analysis'.
 * '[All_regression.do](Regression_Analysis/All_regression.do)' and '[Table S5-S8.do](Regression_Analysis/Table S5-S8.do)' contains all the Stata code for regressions in Main paper and Appendix.
 * '[(New version) DATA_DETOUR_clean.do](Regression_Analysis/DATA_DETOUR_clean.do)'  contains details of how we generate  variables from different data sources for UCDB datasets. 
-*  '[ATAGEN_AUE_GHUB_GUB.do](Regression_Analysis/ATAGEN_AUE_GHUB_GUB.do)' contains details of how we generate  variables from different data sources for other three datasets: AUE, GHUB and GUB. 
+*  '[DATAGEN_AUE_GHUB_GUB.do](Regression_Analysis/ATAGEN_AUE_GHUB_GUB.do)' contains details of how we generate  variables from different data sources for other three datasets: AUE, GHUB and GUB. 
 * The folder '[DATAGEN](Regression_Analysis/DATAGEN)' contain data sources we adopted for regressions. 
 
 Description: 
