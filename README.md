@@ -15,6 +15,8 @@ $$S_i=\frac{\sum P_i+\sum W_i+\sum \hat{B}_i}{\pi i^2}$$
 
 where $W_i$ and $P_i$ denote the areas of water coverage and steep slope areas located within the i km circle around the city center, respectively. $B ̂_i$ represents the area outside the national boundary excluding its overlaps with mountains and water. Finally, $S_i$ denotes the share of barriers index of the urban unit.
 
+* Share of barrier is calculated in preprocessing of "Nonconvexity" and "Detour".
+
 ## Nonconvexity
 The nonconvexity index is designed to assess the impact of geographic barriers on the direct-line connectivity between various locations within an urban area. To calculate this index, we initially generate a set of random points, evenly distributed across the urban footprint, excluding those points that fall within barrier areas. These points are spaced at intervals greater than 200 meters, with each city having approximately 1,000 to 3,000 points to ensure comprehensive coverage of the study area. Subsequently, we create straight lines connecting each pair of points. These lines are then overlaid with the geographic barriers within the designated i km buffer zone. This process allows us to calculate the length of each line that intersects with barriers. We then determine the proportion of intersected length for each line. The average proportion of line lengths intersected by barriers is calculated to establish the nonconvexity index for each urban area.
 
