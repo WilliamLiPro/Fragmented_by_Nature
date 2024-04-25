@@ -14,6 +14,11 @@ set more off
 *capture ssc install estout
 
 
+/* Albert's folder*/
+cd "/Users/saiz/Dropbox (MIT)/RESEARCH/BOSTONGEOGRAPHY/WORLD/regressions_DETOUR/"
+
+/* Luyao's folder*/
+// cd "D:/Dropbox (MIT)/BOSTONGEOGRAPHY/WORLD/regressions_DETOUR/"
 
 /* regressions of UCDB dataset*/
 /* IMPORT UCDB 2019 Dataset with GHSL 2023 UPDATES*/
@@ -156,7 +161,7 @@ drop _est_T3_*
 /* S.6-2. (Complete Table 3) regressions shown in above 'Table 3'*/
 /* S.7. (Table 1 with 5 km radius) Detour regressions at 5 kilometres from center*/
 /* S.8. (TABLE 2 WITH 5 KM RADIUSES) regressions of nonconvexity from the four datasets with 5 km radiuses*/
-do "Table S5-S8.do"
+do "DATAGEN/Table S5-S8.do"
 
 
 
@@ -221,7 +226,6 @@ outreg2[T2_1_1 T2_1_2 T2_1_3 T2_1_4 T2_1_5 T2_1_6 T2_1_7] using TableS11_`i'.xls
 drop _est_T2_1_*
 }
 
-
 /* TS12: IV REGRESIONS WITH RANDOM RADIUSES AS IVs*/
 
 xi:ivreghdfe log_pop_new (nonconvexity_10km_b=nonconvexityratio_0 nonconvexityratio_1 nonconvexityratio_2 nonconvexityratio_3 nonconvexityratio_4) coastal capital dry log_precip log_temp log_elev , absorb (ctr_mn_iso soilYes climate biome ) first
@@ -241,8 +245,35 @@ est store TS12_7
 outreg2[TS12_1 TS12_2 TS12_3 TS12_4 TS12_5 TS12_6 TS12_7] using TableS12_UCDB_IV.xls, stats(coef,se) addstat(Ajusted R2,`e(r2_a)') replace word label
 drop _est_TS12_*
 
+/* TS13: REGRESIONS WITH SPLINE */
+
+gen large_area=0
+replace large_area=1 if nonconvexity_40km_b~=.
+gen marginal_nonconvex=nonconvexity_40km_b if large_area==1
+replace marginal_nonconvex=0 if large_area==0
+label var marginal_nonconvex "Nonconvexity at 40 km Radius x Area Above 314 sq.km"
+
+xi:reghdfe log_pop_new nonconvexity_10km_b marginal_nonconvex large_area coastal capital dry log_precip log_temp log_elev , absorb (ctr_mn_iso soilYes climate biome )
+est store TS13_1
+xi:reghdfe log_densb_new nonconvexity_10km_b marginal_nonconvex large_area coastal capital dry log_precip log_temp log_elev , absorb (ctr_mn_iso soilYes climate biome )
+est store TS13_2
+xi:reghdfe sharebu_new nonconvexity_10km_b marginal_nonconvex large_area coastal capital dry log_precip log_temp log_elev , absorb (ctr_mn_iso soilYes climate biome)
+est store TS13_3
+xi:reghdfe log_gdppc nonconvexity_10km_b marginal_nonconvex large_area  coastal capital dry log_precip log_temp  log_elev log_pop_new, absorb(ctr_mn_iso soilYes climate biome)
+est store TS13_4
+xi:reghdfe log_densb_new nonconvexity_10km_b marginal_nonconvex large_area coastal capital dry log_precip log_temp log_elev log_gdppc log_pop_new , absorb (ctr_mn_iso soilYes climate biome )
+est store TS13_5
+xi:reghdfe sharebu_new nonconvexity_10km_b marginal_nonconvex large_area coastal capital dry log_precip log_temp log_elev log_gdppc log_pop_new , absorb (ctr_mn_iso soilYes climate biome)
+est store TS13_6
+xi:reghdfe log_height_new nonconvexity_10km_b marginal_nonconvex large_area coastal capital dry log_precip log_temp log_elev log_gdppc log_pop_new , absorb (ctr_mn_iso soilYes climate biome)
+est store T13_7
+
+outreg2[TS13_1 TS13_2 TS13_3 TS13_4 TS13_5 TS13_6 TS13_7] using TableS13_UCDB_SPLINE.xls, stats(coef,se) addstat(Ajusted R2,`e(r2_a)')  word label replace
+drop _est_T13_1_*
 
 
 
-
-
+/* Nonlinearities in Detour 10 */
+gen log_pop_new_sq=log_pop_new^2
+gen log_buildup_new_sq=log_buildup_new^2
+xi:reghdfe detour_10km_b nonconvexity_10km_b coastal capital dry log_precip log_temp log_elev log_gdppc  log_pop_new log_pop_new_sq log_buildup_new log_buildup_new_sq, absorb (ctr_mn_iso soilYes climate biome )

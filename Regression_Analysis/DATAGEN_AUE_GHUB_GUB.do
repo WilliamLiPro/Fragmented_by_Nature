@@ -1,7 +1,7 @@
 /* Albert's folder*/
 *cd "/Users/saiz/Dropbox (MIT)/RESEARCH/BOSTONGEOGRAPHY/WORLD/regressions_DETOUR/DATAGEN/"
 /* Luyao's folder*/
-cd "DATAGEN/AUE_GHUB_GUB Data"
+cd "AUE_GHUB_GUB Data"
 
 
 
@@ -44,6 +44,7 @@ label variable nonconvexity_elastic_b "Average Local Non-convexity within elasti
 label variable nonconvexity_elastic_nb "Average Local Non-convexity within elastic ratio of City Center(no boundary)"
 label variable share_barrier_elastic_nb "Share of barriers within elastic ratio of City Center(no boundary)"
 label variable share_barrier_elastic_b "Share of barriers within elastic ratio of City Center(with boundary)"
+label variable share_barrier_40km_b "Share of barriers within 40km of City Center(with boundary)"
 sort areaid
 save "AUE_GeographicIndicators.dta", replace
 clear
@@ -184,6 +185,10 @@ label variable nonconvexity_elastic_b "Average Local Non-convexity within elasti
 label variable nonconvexity_elastic_nb "Average Local Non-convexity within elastic ratio of City Center(no boundary)"
 label variable share_barrier_elastic_nb "Share of barriers within elastic ratio of City Center(no boundary)"
 label variable share_barrier_elastic_b "Share of barriers within elastic ratio of City Center(with boundary)"
+label variable detour_40km_b "Average detour within 40km of City Center(with boundary)"
+label variable share_barrier_40km_b "Share of barriers within 40km of City Center(with boundary)"
+label variable nonconvexity_40km_b "Average Local Non-convexity within 40km of City Center(with boundary)"
+rename share_barrier_40km_b share_of_barrier_40km_b
 sort ghub_id
 save "GHUB_GeographicIndicators.dta", replace
 clear
@@ -305,6 +310,10 @@ label variable nonconvexity_elastic_b "Average Local Non-convexity within elasti
 label variable nonconvexity_elastic_nb "Average Local Non-convexity within elastic ratio of City Center(no boundary)"
 label variable share_barrier_elastic_nb "Share of barriers within elastic ratio of City Center(no boundary)"
 label variable share_barrier_elastic_b "Share of barriers within elastic ratio of City Center(with boundary)"
+label variable detour_40km_b "Average detour within 40km of City Center(with boundary)"
+label variable share_barrier_40km_b "Share of barriers within 40km of City Center(with boundary)"
+label variable nonconvexity_40km_b "Average Local Non-convexity within 40km of City Center(with boundary)"
+rename share_barrier_40km_b share_of_barrier_40km_b
 sort gub_id
 save "GUB_GeographicIndicators.dta", replace
 clear
