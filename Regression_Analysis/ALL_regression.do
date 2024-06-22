@@ -77,6 +77,7 @@ est store T2_1_7
 outreg2[T2_1_1 T2_1_2 T2_1_3 T2_1_4 T2_1_5 T2_1_6 T2_1_7] using Table2_UCDB_new.xls, stats(coef,se) addstat(Ajusted R2,`e(r2_a)') replace word label
 drop _est_T2_1_*
 
+
 /* Table 2-GHUB */
 clear
 use "DATAGEN/AUE_GHUB_GUB Data/GHUB_allvariables_for regressions.dta", clear
@@ -96,6 +97,7 @@ xi:reghdfe log_height_new nonconvexity_10km_b costal capital dry log_precip log_
 est store T2_1_7
 outreg2 [*] using Table2_GHUB.xls, stats(coef,se) addstat(Adjusted R-squared, e(r2_a)) replace word label
 drop _est_T2_2_*
+
 
 /* Table 2-GUB */
 clear
@@ -117,6 +119,8 @@ est store T2_1_7
 outreg2 [*] using Table2_GUB.xls, stats(coef,se) addstat(Adjusted R-squared, e(r2_a)) replace word label
 drop _est_T2_3_*
 
+
+
 /* Table 2-AUE */
 clear
 use "DATAGEN/AUE_GHUB_GUB Data/AUE_allvariables_for regressions.dta"
@@ -134,7 +138,6 @@ xi:regress frgmentationsaturationbuiltupare nonconvexity_10km_b costal capital d
 est store T2_4_6
 xi:regress log_height_new nonconvexity_10km_b costal capital dry log_precip log_temp  log_elev log_pop log_gdppc
 est store T2_4_7
-
 outreg2 [*] using Table2_AUE.xls, stats(coef,se) addstat(Adjusted R-squared, e(r2_a)) replace word label
 drop _est_T2_4_*
 
@@ -245,7 +248,7 @@ est store TS12_7
 outreg2[TS12_1 TS12_2 TS12_3 TS12_4 TS12_5 TS12_6 TS12_7] using TableS12_UCDB_IV.xls, stats(coef,se) addstat(Ajusted R2,`e(r2_a)') replace word label
 drop _est_TS12_*
 
-/* TS13: REGRESIONS WITH SPLINE */
+/* TS13: REGRESIONS WITH "TOBIT" OUTCOMES */
 
 gen large_area=0
 replace large_area=1 if nonconvexity_40km_b~=.
@@ -266,14 +269,100 @@ est store TS13_5
 xi:reghdfe sharebu_new nonconvexity_10km_b marginal_nonconvex large_area coastal capital dry log_precip log_temp log_elev log_gdppc log_pop_new , absorb (ctr_mn_iso soilYes climate biome)
 est store TS13_6
 xi:reghdfe log_height_new nonconvexity_10km_b marginal_nonconvex large_area coastal capital dry log_precip log_temp log_elev log_gdppc log_pop_new , absorb (ctr_mn_iso soilYes climate biome)
-est store T13_7
+est store TS13_7
 
 outreg2[TS13_1 TS13_2 TS13_3 TS13_4 TS13_5 TS13_6 TS13_7] using TableS13_UCDB_SPLINE.xls, stats(coef,se) addstat(Ajusted R2,`e(r2_a)')  word label replace
-drop _est_T13_1_*
+drop _est_TS13_*
 
 
+xi:reghdfe log_pop_new nonconvexity_10km_b marginal_nonconvex large_area coastal capital dry log_precip log_temp log_elev , absorb (ctr_mn_iso soilYes climate biome )
+est store TS13_1
+xi:reghdfe log_densb_new nonconvexity_10km_b marginal_nonconvex large_area coastal capital dry log_precip log_temp log_elev , absorb (ctr_mn_iso soilYes climate biome )
+est store TS13_2
+xi:reghdfe sharebu_new nonconvexity_10km_b marginal_nonconvex large_area coastal capital dry log_precip log_temp log_elev , absorb (ctr_mn_iso soilYes climate biome)
+est store TS13_3
+xi:reghdfe log_gdppc nonconvexity_10km_b marginal_nonconvex large_area  coastal capital dry log_precip log_temp  log_elev log_pop_new, absorb(ctr_mn_iso soilYes climate biome)
+est store TS13_4
+xi:reghdfe log_densb_new nonconvexity_10km_b marginal_nonconvex large_area coastal capital dry log_precip log_temp log_elev log_gdppc log_pop_new , absorb (ctr_mn_iso soilYes climate biome )
+est store TS13_5
+xi:reghdfe sharebu_new nonconvexity_10km_b marginal_nonconvex large_area coastal capital dry log_precip log_temp log_elev log_gdppc log_pop_new , absorb (ctr_mn_iso soilYes climate biome)
+est store TS13_6
+xi:reghdfe log_height_new nonconvexity_10km_b marginal_nonconvex large_area coastal capital dry log_precip log_temp log_elev log_gdppc log_pop_new , absorb (ctr_mn_iso soilYes climate biome)
+est store TS13_7
 
-/* Nonlinearities in Detour 10 */
-gen log_pop_new_sq=log_pop_new^2
-gen log_buildup_new_sq=log_buildup_new^2
-xi:reghdfe detour_10km_b nonconvexity_10km_b coastal capital dry log_precip log_temp log_elev log_gdppc  log_pop_new log_pop_new_sq log_buildup_new log_buildup_new_sq, absorb (ctr_mn_iso soilYes climate biome )
+outreg2[TS13_1 TS13_2 TS13_3 TS13_4 TS13_5 TS13_6 TS13_7] using TableS13_UCDB_SPLINE.xls, stats(coef,se) addstat(Ajusted R2,`e(r2_a)')  word label replace
+drop _est_TS13_*
+
+
+xi:reghdfe log_pop_new nonconvexity_10km_b coastal capital dry log_precip log_temp log_elev if area15<314, absorb (ctr_mn_iso soilYes climate biome )
+est store T2_1_1
+xi:reghdfe log_densb_new nonconvexity_10km_b coastal capital dry log_precip log_temp log_elev  if area15<314, absorb (ctr_mn_iso soilYes climate biome )
+est store T2_1_2
+xi:reghdfe sharebu_new nonconvexity_10km_b coastal capital dry log_precip log_temp log_elev  if area15<314, absorb (ctr_mn_iso soilYes climate biome)
+est store T2_1_3
+xi:reghdfe log_gdppc nonconvexity_10km_b  coastal capital dry log_precip log_temp  log_elev log_pop_new  if area15<314, absorb(ctr_mn_iso soilYes climate biome)
+est store T2_1_4
+xi:reghdfe log_densb_new nonconvexity_10km_b coastal capital dry log_precip log_temp log_elev log_gdppc log_pop_new  if area15<314, absorb (ctr_mn_iso soilYes climate biome )
+est store T2_1_5
+xi:reghdfe sharebu_new nonconvexity_10km_b coastal capital dry log_precip log_temp log_elev log_gdppc log_pop_new  if area15<314, absorb (ctr_mn_iso soilYes climate biome)
+est store T2_1_6
+xi:reghdfe log_height_new nonconvexity_10km_b coastal capital dry log_precip log_temp log_elev log_gdppc log_pop_new  if area15<314, absorb (ctr_mn_iso soilYes climate biome)
+est store T2_1_7
+outreg2[T2_1_1 T2_1_2 T2_1_3 T2_1_4 T2_1_5 T2_1_6 T2_1_7] using TableFYEO_censored.xls, stats(coef,se) addstat(Ajusted R2,`e(r2_a)') replace word label
+drop _est_T2_1_*
+
+/* TS14: REGRESIONS of large cities */
+// UCDB
+clear
+use "DATAGEN/UCDB data/UCDB_allvariables_for regressions.dta"
+xi:reg log_pop_new nonconvexity_10km_b if area>314
+est store T2_1_1
+xi:reg log_densb_new nonconvexity_10km_b if area>314
+est store T2_1_2
+xi:reg sharebu_new nonconvexity_10km_b if area>314
+est store T2_1_3
+xi:reg log_gdppc nonconvexity_10km_b if area>314
+est store T2_1_4
+xi:reg log_densb_new nonconvexity_10km_b log_gdppc log_pop_new if area>314 
+est store T2_1_5
+xi:reg sharebu_new nonconvexity_10km_b log_gdppc log_pop_new if area>314 
+est store T2_1_6
+xi:reg log_height_new nonconvexity_10km_b log_gdppc log_pop_new if area>314 
+est store T2_1_7
+outreg2[T2_1_1 T2_1_2 T2_1_3 T2_1_4 T2_1_5 T2_1_6 T2_1_7] using TableS14_UCDB_MCC1.xls, stats(coef,se) addstat(Ajusted R2,`e(r2_a)') replace word label
+drop _est_T2_1_*
+
+xi:reg log_pop_new  nonconvexity_mcircle if area>314
+est store T2_1_1
+xi:reg log_densb_new nonconvexity_mcircle if area>314
+est store T2_1_2
+xi:reg sharebu_new nonconvexity_mcircle if area>314
+est store T2_1_3
+xi:reg log_gdppc  nonconvexity_mcircle if area>314
+est store T2_1_4
+xi:reg log_densb_new  nonconvexity_mcircle log_gdppc log_pop_new if area>314 
+est store T2_1_5
+xi:reg sharebu_new nonconvexity_mcircle log_gdppc log_pop_new if area>314 
+est store T2_1_6
+xi:reg log_height_new nonconvexity_mcircle log_gdppc log_pop_new if area>314 
+est store T2_1_7
+outreg2[T2_1_1 T2_1_2 T2_1_3 T2_1_4 T2_1_5 T2_1_6 T2_1_7] using TableS14_UCDB_MCC2.xls, stats(coef,se) addstat(Ajusted R2,`e(r2_a)') replace word label
+drop _est_T2_1_*
+
+xi:reg log_pop_new log_radiusMC nonconvexity_mcircle if area>314
+est store T2_1_1
+xi:reg log_densb_new log_radiusMC nonconvexity_mcircle if area>314
+est store T2_1_2
+xi:reg sharebu_new log_radiusMC nonconvexity_mcircle if area>314
+est store T2_1_3
+xi:reg log_gdppc log_radiusMC nonconvexity_mcircle if area>314
+est store T2_1_4
+xi:reg log_densb_new log_radiusMC nonconvexity_mcircle log_gdppc log_pop_new if area>314 
+est store T2_1_5
+xi:reg sharebu_new log_radiusMC nonconvexity_mcircle log_gdppc log_pop_new if area>314 
+est store T2_1_6
+xi:reg log_height_new log_radiusMC nonconvexity_mcircle log_gdppc log_pop_new if area>314 
+est store T2_1_7
+outreg2[T2_1_1 T2_1_2 T2_1_3 T2_1_4 T2_1_5 T2_1_6 T2_1_7] using TableS14_UCDB_MCC3.xls, stats(coef,se) addstat(Ajusted R2,`e(r2_a)') replace word label
+drop _est_T2_1_*
+

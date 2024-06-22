@@ -119,6 +119,8 @@ clear
 /* Geographic indicators of UCDB (share of barriers, nonconvexity and detour) */ 
 import delimited "UCDB_GeographicIndexes.csv", encoding(ISO-8859-1)
 gen coastal=1 if water_share_10km>=0.05
+gen log_radiusMC=log(radius_mcircle)
+
 replace coastal=0 if water_share_10km<0.05
 drop water_share_5km water_share_10km
 label variable nonconvexity_10km_nb "Average Local Non-convexity within 10km of City Center(no boundary)"
@@ -155,6 +157,10 @@ label variable coastal "Dummy for Ocean or Lake Intersection"
 label variable detour_40km_b "Average detour within 40km of City Center(with boundary)"
 label variable share_barrier_40km_b "Share of barriers within 40km of City Center (with boundary)"
 label variable nonconvexity_40km_b "Average Local Non-convexity within 40km of City Center (with boundary)"
+label variable nonconvexity_mcircle "Average Local Non-convexity within the minimum circumscribed circle"
+label variable radius_mcircle "Radius of the minimum circumscribed circle (km)"
+label variable log_radiusMC "Log of minimum circumscribed circle (km)"
+
 sort ucid
 save "UCDB_GeographicIndexes.dta", replace
 clear
@@ -250,7 +256,7 @@ gen sharebu_new=buildup_new/area15
 gen log_country_gdppc=log(GDPPC)
 gen height=bvall/(buildup_new*1000000)
 gen log_height_new=log(height)
-
+gen gap_share=(_pi*radius_mcircle*radius_mcircle-area15)/(_pi*radius_mcircle*radius_mcircle)
 label var log_random_0 "Log of random ratio 0"
 label var log_random_1 "Log of random ratio 1"
 label var log_random_2 "Log of random ratio 2"
@@ -266,6 +272,7 @@ label var log_gdppc_new "Log of GDPPC (UCDB 2023 vintage_weighted version)"
 label var log_country_gdppc "COUNTRY: GDPPC"
 label var height "Average build-up area height (m)"
 label var log_height_new "Log of average build-up area height (m)"
+label variable gap_share "Share of area between urban extend and boundary of minimum circumscribed circle"
 save "UCDB_allvariables_for regressions", replace
 clear
 

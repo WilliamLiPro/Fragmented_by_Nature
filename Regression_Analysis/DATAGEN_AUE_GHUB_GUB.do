@@ -44,7 +44,6 @@ label variable nonconvexity_elastic_b "Average Local Non-convexity within elasti
 label variable nonconvexity_elastic_nb "Average Local Non-convexity within elastic ratio of City Center(no boundary)"
 label variable share_barrier_elastic_nb "Share of barriers within elastic ratio of City Center(no boundary)"
 label variable share_barrier_elastic_b "Share of barriers within elastic ratio of City Center(with boundary)"
-label variable share_barrier_40km_b "Share of barriers within 40km of City Center(with boundary)"
 sort areaid
 save "AUE_GeographicIndicators.dta", replace
 clear
@@ -88,6 +87,14 @@ label var buvolu_non "Non-residential Build-up area volume (m3)"
 label variable log_pop "Log of Total Resident Population in 2014"
 label variable log_gdppc "Log of GDPPC in 2015 (2023 vintage)"
 label variable log_densb "Log of Density of Resident Population in Total Built-up area in 2014"
+
+gen  log_radiusMC = log( mcircle_radius)
+gen gap_share=(_pi*mcircle_radius*mcircle_radius-areakm)/(_pi*mcircle_radius*mcircle_radius)
+label variable nonconvexity_mcircle "Average Local Non-convexity within minimum circumscribed circle"
+label variable mcircle_radius "Radius of the minimum circumscribed circle (km)"
+label variable log_radiusMC "Log of minimum circumscribed circle (km)"
+label variable gap_share "Share of area between urban extend and boundary of minimum circumscribed circle"
+label variable nonconvexity_40km "Average Local Non-convexity within 40km of City Center(with boundary)"
 save "AUE_allvariables_for regressions.dta", replace
 
 /*----------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -188,6 +195,9 @@ label variable share_barrier_elastic_b "Share of barriers within elastic ratio o
 label variable detour_40km_b "Average detour within 40km of City Center(with boundary)"
 label variable share_barrier_40km_b "Share of barriers within 40km of City Center(with boundary)"
 label variable nonconvexity_40km_b "Average Local Non-convexity within 40km of City Center(with boundary)"
+label variable nonconvexity_20km_b "Average Local Non-convexity within 20km of City Center(with boundary)"
+label variable nonconvexity_25km_b "Average Local Non-convexity within 25km of City Center(with boundary)"
+label variable nonconvexity_30km_b "Average Local Non-convexity within 30km of City Center(with boundary)"
 rename share_barrier_40km_b share_of_barrier_40km_b
 sort ghub_id
 save "GHUB_GeographicIndicators.dta", replace
@@ -202,10 +212,14 @@ drop _merge
 egen sum_countryPOP=sum(pop100), by ( country )
 egen sum_countryUrbanArea=sum(bu100), by ( country )
 gen endogenous_radius=2*sqrt((pop100*( sum_countryUrbanArea- bu100)/(sum_countryPOP- pop100))/_pi)
-gen log_radius=log(endogenous_radius)
 drop sum_countryUrbanArea sum_countryUrbanArea
+gen  log_radiusMC = log( radius_mc)
+gen gap_share=(_pi*radius_mc*radius_mc-ue_area)/(_pi*radius_mc*radius_mc)
+label variable nonconvexity_mcircle "Average Local Non-convexity within minimum circumscribed circle"
+label variable radius_mc "Radius of the minimum circumscribed circle (km)"
+label variable log_radiusMC "Log of minimum circumscribed circle (km)"
+label variable gap_share "Share of area between urban extend and boundary of minimum circumscribed circle"
 label var endogenous_radius "Endogenous radius"
-label var log_radius "Log of Endogenous radius"
 save "GHUB_allvariables_for regressions.dta", replace
 /*----------------------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -331,6 +345,14 @@ gen log_radius=log(endogenous_radius)
 drop sum_countryUrbanArea sum_countryUrbanArea
 label var endogenous_radius "Endogenous radius"
 label var log_radius "Log of Endogenous radius"
+
+gen  log_radiusMC = log( radius_mc)
+gen gap_share=(_pi*radius_mc*radius_mc-ue_area)/(_pi*radius_mc*radius_mc)
+label variable nonconvexity_mcircle "Average Local Non-convexity within minimum circumscribed circle"
+label variable radius_mc "Radius of the minimum circumscribed circle (km)"
+label variable log_radiusMC "Log of minimum circumscribed circle (km)"
+label variable gap_share "Share of area between urban extend and boundary of minimum circumscribed circle"
+
 save "GUB_allvariables_for regressions.dta", replace
 clear
 
