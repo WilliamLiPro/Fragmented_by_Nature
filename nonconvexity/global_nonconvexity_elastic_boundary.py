@@ -7,7 +7,8 @@ os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 import time
 import torch
 from tqdm import tqdm
-from utils import (tensor_polygon_intersect, LoadAvailableRegionAndCreateCommutingPoints)
+from utils import (tensor_polygon_intersect, pp_m_polygon_intersect_length_decompose, multi_polygon_to_tensor,
+                   LoadAvailableRegionAndCreateCommutingPoints)
 
 
 def global_nonconvexity(
@@ -40,7 +41,13 @@ def global_nonconvexity(
         # graphical index
         commuting_points = commuting_points.to(dtype=torch.float32)
         torch.cuda.empty_cache()
-        relative_length = tensor_polygon_intersect(commuting_points, list_polygons, 16, device=torch.device('cuda:3'))
+        # relative_length = tensor_polygon_intersect(commuting_points, list_polygons, 16)
+        m_polygon, line_split_position, polygon_split_position = multi_polygon_to_tensor(list_polygons)
+        m_polygon, line_split_position, polygon_split_position = m_polygon.cuda(), line_split_position.cuda(), polygon_split_position.cuda()
+        commuting_points = commuting_points.cuda()
+        relative_length = pp_m_polygon_intersect_length_decompose(m_polygon, line_split_position,
+                                                                  polygon_split_position,
+                                                                  commuting_points, batch_size=16)
         nonconvexity = relative_length.mean(dim=1).mean()
         relative_length_max = relative_length.max(dim=1)[0].max()
         relative_length_std = relative_length.std()

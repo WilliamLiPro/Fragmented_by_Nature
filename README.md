@@ -34,7 +34,7 @@ Here is the output of demo_nonconvexity.py:
 | areaID | share_of_barrier | nonconvexity | number of commuting nodes |
 |-------:|------------------|--------------|---------------------------|
 |       1| 0.2185 | 0.0136 | 974     		|
-|       2| 0.009491| 0.004986| 1233           	|
+|       2| 0.009491| 0.005001| 1233           	|
 |       3| 0.0006421 | 8.3345e-07 | 1246       	|
 
 * For other experiments, please download and prepocess the datasets according to our Appendix.
