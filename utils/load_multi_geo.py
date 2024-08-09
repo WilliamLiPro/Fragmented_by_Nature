@@ -452,7 +452,8 @@ class LoadPolygonAndCreateCommutingPoints(object):
             current_region = current_region.affine_transform(
                 [x_factor, 0, 0, y_factor, -region_center[0] * x_factor, -region_center[1] * y_factor])
             region_bounds = current_region.bounds
-            mask = Point(0, 0).buffer(
+            mask = Point(0.5 * (region_bounds[2] + region_bounds[0]),
+                         0.5 * (region_bounds[3] + region_bounds[1])).buffer(
                 max(region_bounds[2] - region_bounds[0], region_bounds[3] - region_bounds[1]) * 0.5)
             current_barrier = current_barrier.clip(mask)
             commuting_points = create_commuting_points(
@@ -766,7 +767,8 @@ class LoadPolygonAndCreateCommutingPointsRoadMap(object):
             current_region = current_region.affine_transform(
                 [x_factor, 0, 0, y_factor, -region_center[0] * x_factor, -region_center[1] * y_factor])
             region_bounds = current_region.bounds
-            mask = Point(0, 0).buffer(
+            mask = Point(0.5 * (region_bounds[2] + region_bounds[0]),
+                         0.5 * (region_bounds[3] + region_bounds[1])).buffer(
                 max(region_bounds[2] - region_bounds[0], region_bounds[3] - region_bounds[1]) * 0.5)
             current_barrier = current_barrier.clip(mask)
             commuting_points = create_commuting_points(
