@@ -1,7 +1,7 @@
 # Fragmented by Nature
 Data sources for three novel worldwide urban indexes--the share of natural barriers, average dyadic nonconvexity, and the average road detour.
 
-Research Paper: Fragmented by Nature: Metropolitan Geography,Inner Urban Connectivity, and Environmental Outcomes
+Research Paper: Natural fragmentation increases urban density but impedes transportation and city growth worldwide
 
 Author: Luyao Wang, Albert Saiz, Weipeng Li
 
@@ -79,11 +79,11 @@ Description:
 ## Citation
 
 ```BibTeX
-@journal{WilliamLiPro/Fragmented_by_Nature,
+@journal{NF24,
   author = {Luyao Wang, Albert Saiz, Weipeng Li},
-  title = {},
-  journal = {},
-  year = {},
-  doi = {},
+  title = {Natural fragmentation increases urban density but impedes transportation and city growth worldwide},
+  journal = {Nature Cities},
+  year = {2024},
+  doi = {https://doi.org/10.1038/s44284-024-00118-5},
 }
 ```
