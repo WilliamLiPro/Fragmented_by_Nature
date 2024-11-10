@@ -40,11 +40,13 @@ def global_nonconvexity(
 
         # graphical index
         commuting_points = commuting_points.to(dtype=torch.float32)
-        torch.cuda.empty_cache()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
         # relative_length = tensor_polygon_intersect(commuting_points, list_polygons, 16)
         m_polygon, line_split_position, polygon_split_position = multi_polygon_to_tensor(list_polygons)
-        m_polygon, line_split_position, polygon_split_position = m_polygon.cuda(), line_split_position.cuda(), polygon_split_position.cuda()
-        commuting_points = commuting_points.cuda()
+        if torch.cuda.is_available():
+            m_polygon, line_split_position, polygon_split_position = m_polygon.cuda(), line_split_position.cuda(), polygon_split_position.cuda()
+            commuting_points = commuting_points.cuda()
         relative_length = pp_m_polygon_intersect_length_decompose(m_polygon, line_split_position,
                                                                   polygon_split_position,
                                                                   commuting_points, batch_size=16)

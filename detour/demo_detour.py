@@ -39,7 +39,7 @@ def detour_with_road_map(
         cr_d_max=sampling_interval * 1.2,
         d_max=2 ** 11,
         degree_threshold=0.49,
-        device=torch.device('cuda'),
+        device=torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu'),
         use_cc_dist=False,
     )
 
