@@ -111,10 +111,7 @@ def convert_text_to_csv(save_path: str, id_name: str, save_name: str = ''):
     # scan the txt files
     print(f'Scanning {save_path} ...')
     files = os.listdir(save_path)
-    for i, file_name in enumerate(files):
-        front, ext = os.path.splitext(file_name)
-        if not ext == '.txt':
-            del files[i]
+    files = [file for file in files if file.endswith('.txt')]
 
     print(f'Got. {len(files)} .txt files')
 

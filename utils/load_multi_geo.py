@@ -70,7 +70,10 @@ def geo_data_to_points(
                 xy = xy - region_center
             xy = xy.to(torch.float32)
             points.append(xy.view(-1, 1))
-    points = torch.cat(points, dim=1)
+    if len(points) == 0:
+        points = torch.empty((2, 0))
+    else:
+        points = torch.cat(points, dim=1)
     print(f'Finish: converted {points.size()[-1]} Points ')
     return points
 

@@ -51,10 +51,14 @@ def global_nonconvexity(
         relative_length = pp_m_polygon_intersect_length_decompose(m_polygon, line_split_position,
                                                                   polygon_split_position,
                                                                   commuting_points, batch_size=16)
-        nonconvexity = relative_length.mean(dim=1).mean()
-        relative_length_max = relative_length.max(dim=1)[0].max()
-        relative_length_std = relative_length.std()
         n_c = relative_length.size()[0]
+        if n_c == 0:
+            nonconvexity = relative_length_max = -1
+            relative_length_std = 0
+        else:
+            nonconvexity = relative_length.mean(dim=1).mean()
+            relative_length_max = relative_length.max(dim=1)[0].max()
+            relative_length_std = relative_length.std()
         t_run = time.time()
 
         print(f'No. {ii} region, {id_name}: {id_hdc_g0}, share_of_barrier = {share_of_barrier}, nonconvexity = {nonconvexity}, \n'
@@ -94,10 +98,7 @@ def convert_text_to_csv(save_path: str, id_name: str, save_name: str = ''):
     # scan the txt files
     print(f'Scanning {save_path} ...')
     files = os.listdir(save_path)
-    for i, file_name in enumerate(files):
-        front, ext = os.path.splitext(file_name)
-        if not ext == '.txt':
-            del files[i]
+    files = [file for file in files if file.endswith('.txt')]
 
     print(f'Got. {len(files)} .txt files')
 
