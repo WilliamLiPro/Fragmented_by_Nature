@@ -1,5 +1,4 @@
 # Fragmented by Nature
-Data sources for three novel worldwide urban indexes--the share of natural barriers, average dyadic nonconvexity, and the average road detour.
 
 Research Paper: Natural fragmentation increases urban density but impedes transportation and city growth worldwide. Nature Cities. [https://doi.org/10.1038/s44284-024-00118-5](https://doi.org/10.1038/s44284-024-00118-5).
 
