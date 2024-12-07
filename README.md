@@ -72,10 +72,12 @@ Here is the output of demo_detour.py:
 * The folder '[DATAGEN](Regression_Analysis/DATAGEN)' contain data sources we adopted for regressions. 
 
 * Statistical analysis of detour index
-![image](https://github.com/WilliamLiPro/Fragmented_by_Nature/result/Statistical_analysis_of_detour_index.jpeg)
+
+![image](https://github.com/WilliamLiPro/Fragmented_by_Nature/blob/main/result/Statistical_analysis_of_detour_index.jpeg)
 
 * Distribution of share of barriers and nonconvexity across the world
-![image](https://github.com/WilliamLiPro/Fragmented_by_Nature/result/Distribution_of_share_of_barriers_and_nonconvexity_across_the_world.jpeg)
+
+![image](https://github.com/WilliamLiPro/Fragmented_by_Nature/blob/main/result/Distribution_of_share_of_barriers_and_nonconvexity_across_the_world.jpeg)
 
 Description: 
 
