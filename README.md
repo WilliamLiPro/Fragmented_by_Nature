@@ -71,8 +71,8 @@ Here is the output of demo_detour.py:
 * '[DATA_DETOUR_clean.do](Regression_Analysis/DATA_DETOUR_clean.do)'  contains details of how we generate  variables from different data sources for UCDB datasets. 
 *  '[DATAGEN_AUE_GHUB_GUB.do](Regression_Analysis/DATAGEN_AUE_GHUB_GUB.do)' contains details of how we generate  variables from different data sources for other three datasets: AUE, GHUB and GUB. 
 * The folder '[DATAGEN](Regression_Analysis/DATAGEN)' contain data sources we adopted for regressions. 
-![Statistical analysis of detour index](https://github.com/WilliamLiPro/Fragmented_by_Nature/result/Statistical analysis of detour index.jpeg)
-![Distribution of share of barriers and nonconvexity across the world](https://github.com/WilliamLiPro/Fragmented_by_Nature/result/Distribution of share of barriers and nonconvexity across the world.jpeg)
+![image](https://github.com/WilliamLiPro/Fragmented_by_Nature/result/Statistical analysis of detour index.jpeg)
+![image](https://github.com/WilliamLiPro/Fragmented_by_Nature/result/Distribution of share of barriers and nonconvexity across the world.jpeg)
 
 Description: 
 
