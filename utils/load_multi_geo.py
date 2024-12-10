@@ -493,11 +493,13 @@ class LoadAvailableRegionAndCreateCommutingPoints(object):
                  id_name: str = 'ID_HDC_G0',
                  sampling_interval: float = 0.2,
                  sampling_n_expected=None,
+                 radius: float = None,
                  how='intersection',
                  trans_factor=True,
                  ):
         self.sampling_interval = sampling_interval
         self.sampling_n_expected = sampling_n_expected
+        self.radius = radius
         self.how = how
 
         print(f'LoadAvailableRegionAndCreateCommutingPoints: \nLoading region data from {region_file_name} .. ')
@@ -562,7 +564,10 @@ class LoadAvailableRegionAndCreateCommutingPoints(object):
         list_polygons = multi_polygon_to_multi_lines(geopandas.GeoDataFrame(
             geometry=current_barrier, crs=self.crs))
         commuting_points = geo_data_to_points(commuting_points)
-        share_of_barriers = current_barrier.area.values.sum() / convex_hull.area.values.sum()
+        if self.radius is None:
+            share_of_barriers = current_barrier.area.values.sum() / convex_hull.area.values.sum()
+        else:
+            share_of_barriers = 1 - current_region.area.values.sum() / (math.pi * self.radius ** 2)
         print('Geo Transform finish')
 
         return list_polygons, commuting_points, region_bounds, x_factor, y_factor, region_center, share_of_barriers
