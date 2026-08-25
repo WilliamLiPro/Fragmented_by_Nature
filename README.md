@@ -1,6 +1,6 @@
 # Fragmented by Nature
 
-Research Paper: Natural fragmentation increases urban density but impedes transportation and city growth worldwide. Nature Cities. [https://doi.org/10.1038/s44284-024-00118-5](https://doi.org/10.1038/s44284-024-00118-5).
+Research Paper: Natural fragmentation increases urban density but impedes transportation and city growth worldwide. **Nature Cities**. [https://doi.org/10.1038/s44284-024-00118-5](https://doi.org/10.1038/s44284-024-00118-5).
 
 Author: Luyao Wang, Albert Saiz, Weipeng Li
 
