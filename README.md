@@ -1,6 +1,6 @@
 # Fragmented by Nature
 
-Research Paper: Natural fragmentation increases urban density but impedes transportation and city growth worldwide. **Nature Cities**. [https://doi.org/10.1038/s44284-024-00118-5](https://doi.org/10.1038/s44284-024-00118-5).
+Research Paper: Natural fragmentation increases urban density but impedes transportation and city growth worldwide. **Nature Cities**. [https://www.nature.com/articles/s44284-024-00118-5](https://www.nature.com/articles/s44284-024-00118-5).
 
 Author: Luyao Wang, Albert Saiz, Weipeng Li
 
@@ -91,6 +91,12 @@ Description:
   title = {Natural fragmentation increases urban density but impedes transportation and city growth worldwide},
   journal = {Nature Cities},
   year = {2024},
-  doi = {https://doi.org/10.1038/s44284-024-00118-5},
+  doi = {10.1038/s44284-024-00118-5},
+  issn = {2731-9997},
+  pages = {642--653},
+  volume = {1},
+  number = {10},
+  abstract = {Physical geography has long been identified as critical for urban development, land use and environmental outcomes in cities worldwide. However, the literature has yet to provide comprehensive, quantitative analyses of the global extent and impact of urban geographic barriers. Here we introduce three novel indexes: the share of natural barriers, nonconvexity (a measure of natural fragmentation) and the average road detour, to measure and study the practical reach and effects of natural constraints around global cities. We calculate these indexes for areas in and around four separate global city‑boundary definitions, augmenting the original data with additional variables. We find that natural barriers lead to more complex transportation environments and are associated with higher urban densities, smaller urbanized footprints, taller buildings and less pollution but also with lower incomes and smaller populations. To draw meaningful policy conclusions, comparative research about environmental, economic and social outcomes across global cities should always account for their surrounding geographies.},
+  url = {https://doi.org/10.1038/s44284-024-00118-5}
 }
 ```
